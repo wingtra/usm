@@ -159,6 +159,8 @@ def make_dot_file_string(transitions, functions):
         weight = 1
         if t.style == NORMAL:
             style = "solid"
+            if t.edge_name == "NEXT":
+                weight = 10
         elif t.style == FALLBACK:
             style = "dotted"
             weight = 0.1
