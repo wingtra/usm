@@ -39,7 +39,7 @@
 
 namespace usm {
 
-enum class DefaultTransition { REPEAT, NEXT, ERROR };
+enum class DefaultTransition { REPEAT, NEXT, USM_ERROR };
 
 template <typename StateEnum, typename TransitionEnum = DefaultTransition>
 class StateMachine {

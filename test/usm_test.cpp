@@ -57,7 +57,7 @@ enum TestStates {
 };
 
 
-enum class TestTransition { REPEAT, CONTINUE, OUT_OF_DATA, ERROR };
+enum class TestTransition { REPEAT, CONTINUE, OUT_OF_DATA, USM_ERROR };
 
 
 class TestStateMachine final : public StateMachine<TestStates, TestTransition> {
@@ -80,12 +80,12 @@ class TestStateMachine final : public StateMachine<TestStates, TestTransition> {
   Transition runCurrentState(TestStates currentState) override {
     if (trigger_error_once) {
       trigger_error_once = false;
-      return Transition::ERROR;
+      return Transition::USM_ERROR;
     }
 
-    Transition t = Transition::ERROR;
+    Transition t = Transition::USM_ERROR;
     // clang-format off
-    USM_TABLE(currentState, Transition::ERROR, t,
+    USM_TABLE(currentState, Transition::USM_ERROR, t,
               USM_MAP(START, start(), t);
               USM_MAP(PATH_A_1, a1(), t);
               USM_MAP(PATH_A_2, a2(), t);
@@ -108,7 +108,7 @@ class TestStateMachine final : public StateMachine<TestStates, TestTransition> {
       USM_STATE(transition, START,    USM_MAP(Transition::CONTINUE, PATH_A_1, s);
                                       USM_MAP(Transition::OUT_OF_DATA, PATH_B_1, s));
       USM_STATE(transition, PATH_A_1, USM_MAP(Transition::CONTINUE, PATH_A_2, s);
-                                      USM_MAP(Transition::ERROR, PATH_B_3, s));
+                                      USM_MAP(Transition::USM_ERROR, PATH_B_3, s));
       USM_STATE(transition, PATH_A_2, USM_MAP(Transition::CONTINUE, END, s));
       USM_STATE(transition, PATH_B_1, USM_MAP(Transition::CONTINUE, PATH_B_2, s));
       USM_STATE(transition, PATH_B_2, USM_MAP(Transition::CONTINUE, PATH_B_3, s));
